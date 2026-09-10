@@ -1207,7 +1207,7 @@ html[data-theme="dark"] .icon-theme-dark { display: block; }
         <i data-lucide="sun" class="icon-theme-light"></i>
         <i data-lucide="moon" class="icon-theme-dark"></i>
       </button>
-      <a href="#course" class="button-primary" id="start-now-desktop-button">Start Now <i data-lucide="arrow-right" style="width:16px;height:16px;"></i></a>
+      <a href="#course" style="margin: 5px 0;" class="button-primary" id="start-now-desktop-button">Mulai Sekarang</a>
       <button class="mobile-menu-button" id="mobile-menu-button" aria-label="Buka menu" aria-expanded="false">
         <i data-lucide="align-right" class="icon-open"></i>
         <i data-lucide="x" class="icon-close"></i>
@@ -1241,7 +1241,7 @@ html[data-theme="dark"] .icon-theme-dark { display: block; }
         <h1 class="hero-title" data-aos="fade-up" data-aos-duration="700" data-aos-delay="100" data-aos-mirror="false" data-aos-once="true">Membangun kemampuan coding</h1>
         <p class="hero-description" data-aos="fade-up" data-aos-duration="700" data-aos-delay="200" data-aos-mirror="false" data-aos-once="true">Coding Camp melatih peserta berpikir logis, memecahkan masalah, dan bekerja terstruktur lewat praktik dan project nyata, bukan sekadar teori.</p>
         <div class="hero-cta" data-aos="fade-up" data-aos-duration="700" data-aos-delay="300" data-aos-mirror="false" data-aos-once="true">
-          <a href="#course" class="button-primary">Start Now <i data-lucide="arrow-right" style="width:16px;height:16px;"></i></a>
+          <a href="#course" class="button-primary">Mulai Sekarang <i data-lucide="arrow-right" style="width:16px;height:16px;"></i></a>
           <a href="#tentang" class="button-outline">Lihat Kurikulum</a>
         </div>
       </div>
@@ -1370,7 +1370,7 @@ html[data-theme="dark"] .icon-theme-dark { display: block; }
             <p class="footer-column-title">Kontak</p>
             <ul>
               <li><a href="mailto:ilanalimanjs@gmail.com">ilanalimanjs@gmail.com</a></li>
-              <li><a href="tel:+6289538669267">+62 895 3866 9267</a></li>
+              <li><a href="https://wa.me/6289538669267">+62 895 3866 9267</a></li>
               <li><a href="#">Serang, Banten</a></li>
             </ul>
           </div>
@@ -1605,6 +1605,23 @@ resetFilterButton.addEventListener('click', function () {
 });
 
 loadCourses();
+
+const stackingSections = ['beranda', 'tentang', 'course'];
+
+function scrollToSection(targetId) {
+  const target = document.getElementById(targetId);
+  if (!target) return;
+  window.scrollTo({ top: target.offsetTop, behavior: 'smooth' });
+}
+
+document.querySelectorAll('a[href^="#"]').forEach(function (link) {
+  const targetId = link.getAttribute('href').slice(1);
+  if (!stackingSections.includes(targetId)) return;
+  link.addEventListener('click', function (event) {
+    event.preventDefault();
+    scrollToSection(targetId);
+  });
+});
 </script>
 
 </body>

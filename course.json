@@ -3,12 +3,12 @@
     "id": 1,
     "title": "Dasar Pemrograman JavaScript",
     "description": "Pelajari fondasi JavaScript mulai dari variabel, fungsi, hingga struktur kontrol untuk membangun logika berpikir yang kuat. Materi disusun bertahap dimulai dari sintaks dasar, tipe data, operator, percabangan, dan perulangan, dilanjutkan ke konsep fungsi, scope, serta manipulasi array dan objek. Setiap topik dilengkapi latihan praktik supaya kamu benar benar memahami cara kerja logika program, bukan sekadar menghafal sintaks yang mudah dilupakan.",
-    "learningObjectives": "Setelah menyelesaikan course ini, kamu akan mampu menulis program JavaScript dari nol tanpa bergantung pada contekan sintaks, memahami alur eksekusi kode secara logis, serta terbiasa memecah masalah menjadi langkah langkah kecil sebelum menuliskannya jadi kode. Kemampuan ini menjadi fondasi wajib sebelum lanjut ke framework atau library apapun, baik untuk pengembangan web, mobile, maupun backend.",
+    "learningObjectives": "Kemampuan ini menjadi fondasi wajib sebelum lanjut ke framework atau library apapun, baik untuk pengembangan web, mobile, maupun backend.",
     "image": "https://images.unsplash.com/photo-1579468118864-1b9ea3c0db4a?w=600&q=80",
     "level": "beginner",
     "category": "Frontend",
     "duration": "6 minggu",
     "uploadedAt": "2026-01-12",
-    "url": "detail.html?id=1"
+    "url": "course/javascript_dasar.html?id=1"
   }
 ]
