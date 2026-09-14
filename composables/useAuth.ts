@@ -1,4 +1,4 @@
-export type AuthUser = { id: string; name: string; email: string }
+export type AuthUser = { id: string; name: string; email: string; role: 'user' | 'admin' }
 
 export function useAuth() {
   const user = useState<AuthUser | null>('user', () => null)

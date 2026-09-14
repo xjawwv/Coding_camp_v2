@@ -13,7 +13,7 @@ export default defineEventHandler(async (event) => {
   }
   try {
     await database().execute('INSERT INTO users (id, name, email, password_hash) VALUES (?, ?, ?, ?)', [randomUUID(), name, email, await hashPassword(body.password)])
-    const [rows] = await database().query('SELECT id, name, email FROM users WHERE email = ?', [email])
+    const [rows] = await database().query('SELECT id, name, email, role FROM users WHERE email = ?', [email])
     const user = (rows as any[])[0]
     await createSession(event, user.id)
     setResponseStatus(event, 201)

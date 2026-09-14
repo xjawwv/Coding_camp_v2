@@ -24,6 +24,12 @@ DATABASE_URL=mysql://root:password@localhost:3306/coding_camp
 npm run dev
 ```
 
+Untuk database yang sudah ada dari versi sebelumnya, jalankan migration admin:
+
+```bash
+mysql -u root -p < database/migrate-admin.sql
+```
+
 ## Register
 
 `POST /api/auth/register`
@@ -188,3 +194,49 @@ curl -i -b cookies.txt -X POST http://localhost:3000/api/auth/logout
 - `401`: email atau password salah.
 - `409`: email sudah terdaftar.
 - `500`: kegagalan internal server atau koneksi database.
+
+## Role dan Admin Panel
+
+Semua akun baru memiliki role `user`. Untuk membuat akun admin:
+
+```sql
+USE coding_camp;
+UPDATE users SET role = 'admin' WHERE email = 'admin@example.com';
+```
+
+Panel admin tersedia pada `/admin` dan hanya dapat digunakan oleh role `admin`.
+
+Fitur panel:
+
+- Melihat daftar user.
+- Mengubah nama user.
+- Mengubah role user.
+- Menghapus user lain.
+- Membuat course.
+- Mengedit course.
+- Menghapus course.
+
+API admin menggunakan session cookie yang sama dan seluruh endpoint divalidasi server-side:
+
+- `GET /api/admin/users`
+- `PATCH /api/admin/users/:id`
+- `DELETE /api/admin/users/:id`
+- `GET /api/admin/courses`
+- `POST /api/admin/courses`
+- `PUT /api/admin/courses/:id`
+- `DELETE /api/admin/courses/:id`
+
+Contoh body create atau update course:
+
+```json
+{
+  "title": "Dasar Pemrograman JavaScript",
+  "description": "Materi JavaScript untuk pemula.",
+  "learningObjectives": "Peserta memahami sintaks dasar JavaScript.",
+  "image": "https://example.com/javascript.jpg",
+  "level": "beginner",
+  "category": "Frontend",
+  "duration": "6 minggu",
+  "uploadedAt": "2026-01-12"
+}
+```

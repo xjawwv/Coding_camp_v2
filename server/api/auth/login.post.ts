@@ -4,7 +4,7 @@ import { createSession, verifyPassword } from '../../utils/auth'
 
 export default defineEventHandler(async (event) => {
   const body = await readBody<{ email?: string; password?: string }>(event)
-  const [rows] = await database().query('SELECT id, name, email, password_hash FROM users WHERE email = ?', [body.email?.trim().toLowerCase()])
+  const [rows] = await database().query('SELECT id, name, email, role, password_hash FROM users WHERE email = ?', [body.email?.trim().toLowerCase()])
   const user = (rows as any[])[0]
   if (!user || !body.password || !(await verifyPassword(body.password, user.password_hash))) {
     setResponseStatus(event, 401)

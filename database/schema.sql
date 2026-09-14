@@ -6,6 +6,7 @@ CREATE TABLE IF NOT EXISTS users (
   name VARCHAR(100) NOT NULL,
   email VARCHAR(255) NOT NULL UNIQUE,
   password_hash TEXT NOT NULL,
+  role ENUM('user', 'admin') NOT NULL DEFAULT 'user',
   created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
@@ -19,4 +20,18 @@ CREATE TABLE IF NOT EXISTS sessions (
   CONSTRAINT sessions_user_id_fk FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
   INDEX sessions_user_id_idx (user_id),
   INDEX sessions_expires_at_idx (expires_at)
+);
+
+CREATE TABLE IF NOT EXISTS courses (
+  id CHAR(36) PRIMARY KEY,
+  title VARCHAR(255) NOT NULL,
+  description TEXT NOT NULL,
+  learning_objectives TEXT NOT NULL,
+  image VARCHAR(1000) NOT NULL,
+  level ENUM('beginner', 'intermediate', 'advanced') NOT NULL DEFAULT 'beginner',
+  category VARCHAR(100) NOT NULL,
+  duration VARCHAR(100) NOT NULL,
+  uploaded_at DATE NOT NULL,
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
