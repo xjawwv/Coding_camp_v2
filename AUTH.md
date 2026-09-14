@@ -24,7 +24,7 @@ DATABASE_URL=mysql://root:password@localhost:3306/coding_camp
 npm run dev
 ```
 
-Untuk database yang sudah ada dari versi sebelumnya, jalankan migration admin:
+Untuk database yang sudah ada dari versi sebelumnya, jalankan migration admin. Migration ini kompatibel dengan MySQL/MariaDB yang tidak mendukung `ADD COLUMN IF NOT EXISTS`:
 
 ```bash
 mysql -u root -p < database/migrate-admin.sql
