@@ -235,15 +235,34 @@ API admin menggunakan session cookie yang sama dan seluruh endpoint divalidasi s
 
 Contoh body create atau update course:
 
+Endpoint course menerima `multipart/form-data`, bukan JSON, karena gambar dikirim sebagai file. Field teks yang dikirim:
+
 ```json
 {
   "title": "Dasar Pemrograman JavaScript",
   "description": "Materi JavaScript untuk pemula.",
   "learningObjectives": "Peserta memahami sintaks dasar JavaScript.",
-  "image": "https://example.com/javascript.jpg",
   "level": "beginner",
   "category": "Frontend",
   "duration": "6 minggu",
   "uploadedAt": "2026-01-12"
 }
 ```
+
+Tambahkan file gambar pada field `image`. Format yang didukung: PNG, JPEG, WebP, dan GIF. Ukuran maksimal 2 MB.
+
+Contoh cURL create course:
+
+```bash
+curl -b cookies.txt -X POST http://localhost:3000/api/admin/courses \
+  -F "title=Dasar Pemrograman JavaScript" \
+  -F "description=Materi JavaScript untuk pemula." \
+  -F "learningObjectives=Peserta memahami sintaks dasar JavaScript." \
+  -F "image=@./javascript.jpg" \
+  -F "level=beginner" \
+  -F "category=Frontend" \
+  -F "duration=6 minggu" \
+  -F "uploadedAt=2026-01-12"
+```
+
+Gambar disimpan sebagai data URL pada kolom `courses.image`. Pendekatan ini sesuai untuk aplikasi kecil. Jika ukuran katalog atau file membesar, pindahkan gambar ke object storage seperti S3 atau Cloudinary dan simpan URL-nya di database.
