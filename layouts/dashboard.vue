@@ -8,9 +8,9 @@ onMounted(loadUser)
 const links = computed<NavigationMenuItem[][]>(() => [[{
   label: 'Dashboard', icon: 'i-lucide-house', to: '/dashboard', exact: true
 }, ...(user.value?.role === 'admin' ? [{
-  label: 'Manage Users', icon: 'i-lucide-users', to: '/admin/users'
+  label: 'User', icon: 'i-lucide-users', to: '/admin/users'
 }, {
-  label: 'Manage Courses', icon: 'i-lucide-book-open', to: '/admin/courses'
+  label: 'Course', icon: 'i-lucide-book-open', to: '/admin/courses'
 }] : []), {
   label: 'Website', icon: 'i-lucide-external-link', to: '/'
 }], [{
