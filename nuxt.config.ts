@@ -16,7 +16,7 @@ export default defineNuxtConfig({
       interval: 60000
     }
   },
-  css: ['~/assets/main.css'],
+  css: ['~/assets/main.css', '~/assets/dashboard.css'],
   app: {
     head: {
       htmlAttrs: { lang: 'id' },

@@ -1,14 +1,26 @@
 <script setup lang="ts">
+import type { NavigationMenuItem } from '@nuxt/ui'
+
 const { user, loadUser } = useAuth()
-const collapsed = ref(false)
-const mobileOpen = ref(false)
+const open = ref(false)
 onMounted(loadUser)
-const navigation = computed(() => [
-  { label: 'Dashboard', to: '/dashboard', icon: '⌂' },
-  ...(user.value?.role === 'admin' ? [{ label: 'Admin Panel', to: '/admin', icon: '⚙' }] : []),
-  { label: 'Course', to: '/#course', icon: '▣' }
-])
+
+const links = computed<NavigationMenuItem[][]>(() => [[{
+  label: 'Dashboard', icon: 'i-lucide-house', to: '/dashboard', exact: true
+}, ...(user.value?.role === 'admin' ? [{
+  label: 'Manage Users', icon: 'i-lucide-users', to: '/admin#users'
+}, {
+  label: 'Manage Courses', icon: 'i-lucide-book-open', to: '/admin#courses'
+}] : []), {
+  label: 'Website', icon: 'i-lucide-external-link', to: '/'
+}], [{
+  label: 'Documentation', icon: 'i-lucide-book-open', to: '/AUTH.md'
+}, {
+  label: 'Support', icon: 'i-lucide-life-buoy', to: 'mailto:ilanalimanjs@gmail.com'
+}]])
+
+const groups = computed(() => [{ id: 'links', label: 'Go to', items: links.value.flat() }, { id: 'code', label: 'Account', items: [{ id: 'dashboard', label: 'Open dashboard', icon: 'i-lucide-layout-dashboard', to: '/dashboard' }] }])
 </script>
 <template>
-  <div class="dashboard-shell"><aside :class="['dashboard-sidebar', { collapsed, open: mobileOpen }]" @click.self="mobileOpen = false"><div class="dashboard-brand"><NuxtLink to="/">CodingCamp</NuxtLink><button class="sidebar-toggle" aria-label="Tutup sidebar" @click="collapsed = !collapsed">‹</button></div><nav class="dashboard-nav"><NuxtLink v-for="item in navigation" :key="item.to" :to="item.to" class="dashboard-nav-item" @click="mobileOpen = false"><span class="dashboard-nav-icon">{{ item.icon }}</span><span>{{ item.label }}</span></NuxtLink></nav><div class="dashboard-sidebar-footer"><NuxtLink to="/" class="dashboard-back">← <span>Kembali ke website</span></NuxtLink></div></aside><div class="dashboard-main"><header class="dashboard-topbar"><button class="dashboard-mobile-toggle" aria-label="Buka sidebar" @click="mobileOpen = !mobileOpen">☰</button><div class="dashboard-topbar-spacer"></div><ThemeToggle /><NuxtLink to="/dashboard" class="dashboard-user"><span class="dashboard-avatar">{{ user?.name?.charAt(0).toUpperCase() || '?' }}</span><span class="dashboard-user-name">{{ user?.name || 'Account' }}</span></NuxtLink></header><slot /></div></div>
+  <UDashboardGroup unit="rem"><UDashboardSidebar id="coding-camp" v-model:open="open" collapsible resizable class="bg-elevated/25" :ui="{ footer: 'lg:border-t lg:border-default' }"><template #header="{ collapsed }"><UButton color="neutral" variant="ghost" block :square="collapsed" :class="[!collapsed && 'py-2']"><template #leading><span class="dashboard-logo-mark">CC</span></template><span v-if="!collapsed" class="font-bold text-highlighted">CodingCamp</span></UButton></template><template #default="{ collapsed }"><UDashboardSearchButton :collapsed="collapsed" class="bg-transparent ring-default" /><UNavigationMenu :collapsed="collapsed" :items="links[0]" orientation="vertical" tooltip popover /><UNavigationMenu :collapsed="collapsed" :items="links[1]" orientation="vertical" tooltip class="mt-auto" /></template><template #footer="{ collapsed }"><UDropdownMenu :items="[[{ label: user?.name || 'Account', icon: 'i-lucide-user' }], [{ label: 'Logout', icon: 'i-lucide-log-out', onSelect: async () => { await $fetch('/api/auth/logout', { method: 'POST' }); user.value = null; await navigateTo('/') } }]]" :content="{ align: 'center', collisionPadding: 12 }"><UButton color="neutral" variant="ghost" block :square="collapsed" :label="collapsed ? undefined : user?.name" :trailing-icon="collapsed ? undefined : 'i-lucide-chevrons-up-down'" /></UDropdownMenu></template></UDashboardSidebar><UDashboardSearch :groups="groups" /><slot /></UDashboardGroup>
 </template>

@@ -1,0 +1,17 @@
+@import "tailwindcss" theme(static);
+@import "@nuxt/ui";
+
+@theme static {
+  --font-sans: 'Poppins', sans-serif;
+  --color-orange-50: #fff7ed;
+  --color-orange-100: #ffedd5;
+  --color-orange-200: #fed7aa;
+  --color-orange-300: #fdba74;
+  --color-orange-400: #fb923c;
+  --color-orange-500: #ff5a1f;
+  --color-orange-600: #ea4b16;
+  --color-orange-700: #c73d10;
+  --color-orange-800: #9f3413;
+  --color-orange-900: #7f2d12;
+  --color-orange-950: #431407;
+}
