@@ -1,6 +1,11 @@
 # Admin System
 
-Sistem memiliki role `user` dan `admin`. User baru selalu memiliki role `user`.
+Panel admin saat ini hanya menangani user. Course dibuat dan dikelola langsung pada source page di `pages/course`.
+
+## Roles
+
+- `user`: dapat mengakses dashboard dan course.
+- `admin`: dapat mengakses dashboard dan panel User.
 
 Promosi akun admin:
 
@@ -9,23 +14,15 @@ USE coding_camp;
 UPDATE users SET role = 'admin' WHERE email = 'admin@example.com';
 ```
 
-Route admin:
+## Routes
 
-- `/admin`: overview.
-- `/admin/users`: pengelolaan user.
-- `/admin/courses`: pengelolaan course.
+- `/admin`: overview admin untuk user.
+- `/admin/users`: daftar dan pengelolaan user.
 
-API user:
+## API
 
 - `GET /api/admin/users`
 - `PATCH /api/admin/users/:id`
 - `DELETE /api/admin/users/:id`
 
-API course:
-
-- `GET /api/admin/courses`
-- `POST /api/admin/courses`
-- `PUT /api/admin/courses/:id`
-- `DELETE /api/admin/courses/:id`
-
-Semua endpoint memvalidasi role admin di server menggunakan `requireAdmin()`. Detail upload dan materi ada di `UPLOADS.md` dan `COURSE_CONTENT.md`.
+Semua endpoint memvalidasi role admin di server menggunakan `requireAdmin()`.

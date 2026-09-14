@@ -1,6 +1,0 @@
-<script setup lang="ts">
-import type { CourseBlock } from '~/utils/course-markdown'
-defineProps<{ blocks: CourseBlock[] }>()
-const inline = (text: string) => text.split(/(`[^`]+`)/g).map((part, index) => part.startsWith('`') ? { text: part.slice(1, -1), code: true, index } : { text: part, code: false, index })
-</script>
-<template><div class="course-content-renderer"><template v-for="(block, index) in blocks" :key="index"><h2 v-if="block.type === 'heading'" :class="`reader-heading reader-heading-${block.level}`">{{ block.text }}</h2><p v-else-if="block.type === 'paragraph'" class="reader-paragraph"><template v-for="part in inline(block.text || '')" :key="part.index"><code v-if="part.code">{{ part.text }}</code><span v-else>{{ part.text }}</span></template></p><CodePlayground v-else-if="block.type === 'code'" :code="block.code || ''" :filename="`${block.language || 'code'}.js`" /><div v-else-if="block.type === 'callout'" :class="['reader-callout', `reader-callout-${block.variant}`]"><strong>{{ block.variant }}</strong><p>{{ block.text }}</p></div><ul v-else-if="block.type === 'list'" class="reader-list"><li v-for="item in block.items" :key="item">{{ item }}</li></ul><blockquote v-else-if="block.type === 'quote'" class="reader-quote">{{ block.text }}</blockquote><hr v-else-if="block.type === 'divider'" class="reader-divider"></template></div></template>

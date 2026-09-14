@@ -1,10 +1,8 @@
 <script setup lang="ts">
 import { courses, levelNames } from '~/data/courses'
-import { parseCourseMarkdown } from '~/utils/course-markdown'
 
 const route = useRoute()
 const course = courses.find(item => item.id === Number(route.query.id)) || courses[0]
-const databaseCourse = ref<any>(null)
 const sections = [
   ['Variable', 'Variable adalah tempat menyimpan nilai supaya bisa dipakai ulang di bagian lain program.', 'const namaPengguna = "Ilan";\nlet jumlahPoin = 10;\njumlahPoin += 5;\nconsole.log(jumlahPoin);'],
   ['Aritmatika & Operator', 'Operator aritmatika dipakai untuk melakukan perhitungan matematis dan menjadi dasar dari hampir semua logika program.', 'const a = 10;\nconst b = 3;\nconsole.log(a + b);\nconsole.log(a ** b);'],
@@ -16,12 +14,10 @@ useHead({ title: `${course.title} - Coding Camp RPL 2026` })
 const { loadUser } = useAuth()
 onMounted(async () => {
   if (!await loadUser()) await navigateTo({ path: '/login', query: { redirect: route.fullPath } })
-  try { databaseCourse.value = (await $fetch<{ course: any }>(`/api/courses/${route.query.id || course.id}`)).course } catch { databaseCourse.value = null }
 })
-const readerBlocks = computed(() => databaseCourse.value?.content ? parseCourseMarkdown(databaseCourse.value.content) : [])
 </script>
 <template>
   <SiteNav />
-  <main><section class="article-hero"><div class="container"><div class="article-meta-row"><span class="article-category">{{ databaseCourse?.category || course.category }}</span><span class="article-duration">◷ {{ databaseCourse?.duration || course.duration }}</span><span class="article-level">{{ levelNames[databaseCourse?.level || course.level] }}</span></div><h1 class="article-title">{{ databaseCourse?.title || course.title }}</h1><p class="article-description">{{ databaseCourse?.description || 'Fondasi wajib sebelum lanjut ke framework atau library apapun, baik untuk pengembangan web, mobile maupun backend.' }}</p></div></section><section class="article-body"><div class="container"><article class="article-content"><CourseContentRenderer v-if="readerBlocks.length" :blocks="readerBlocks" /><template v-else><div v-for="(section, index) in sections" :key="section[0]" class="content-section"><p class="section-number">{{ String(index + 1).padStart(2, '0') }}</p><h2 class="content-heading">{{ section[0] }}</h2><p class="content-paragraph">{{ section[1] }} JavaScript modern punya sintaks yang sederhana dan fleksibel untuk membangun aplikasi.</p><CodePlayground :code="section[2]" :filename="`${section[0].toLowerCase().replaceAll(' ', '-')}.js`" /></div></template><div class="article-nav-footer"><NuxtLink to="/#course">&lt;- Kembali ke Course</NuxtLink></div></article></div></section></main>
+  <main><section class="article-hero"><div class="container"><div class="article-meta-row"><span class="article-category">{{ course.category }}</span><span class="article-duration">◷ {{ course.duration }}</span><span class="article-level">{{ levelNames[course.level] }}</span></div><h1 class="article-title">{{ course.title }}</h1><p class="article-description">Fondasi wajib sebelum lanjut ke framework atau library apapun, baik untuk pengembangan web, mobile maupun backend.</p></div></section><section class="article-body"><div class="container"><article class="article-content"><div v-for="(section, index) in sections" :key="section[0]" class="content-section"><p class="section-number">{{ String(index + 1).padStart(2, '0') }}</p><h2 class="content-heading">{{ section[0] }}</h2><p class="content-paragraph">{{ section[1] }} JavaScript modern punya sintaks yang sederhana dan fleksibel untuk membangun aplikasi.</p><CodePlayground :code="section[2]" :filename="`${section[0].toLowerCase().replaceAll(' ', '-')}.js`" /></div><div class="article-nav-footer"><NuxtLink to="/#course">&lt;- Kembali ke Course</NuxtLink></div></article></div></section></main>
   <SiteFooter />
 </template>

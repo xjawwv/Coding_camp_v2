@@ -15,5 +15,4 @@
   --color-orange-900: #7f2d12;
   --color-orange-950: #431407;
 }
-.course-image-input{width:100%;padding:.42rem;border:1px solid var(--ui-border);border-radius:.375rem;font-size:.75rem;color:var(--ui-text-muted)}
 .prose-docs pre{white-space:pre-wrap;overflow-wrap:anywhere;font:0.85rem/1.7 var(--ui-font-family);color:var(--ui-text)}

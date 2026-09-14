@@ -27,7 +27,6 @@ CREATE TABLE IF NOT EXISTS courses (
   title VARCHAR(255) NOT NULL,
   description TEXT NOT NULL,
   learning_objectives TEXT NOT NULL,
-  content MEDIUMTEXT NULL,
   image MEDIUMTEXT NOT NULL,
   level ENUM('beginner', 'intermediate', 'advanced') NOT NULL DEFAULT 'beginner',
   category VARCHAR(100) NOT NULL,
