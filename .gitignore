@@ -2,5 +2,9 @@
 /.nuxt
 /.output
 opencode.json
+.env
+.env.*
+!.env.example
 index.html
 course.json
+package-lock.json

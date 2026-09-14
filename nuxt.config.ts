@@ -1,6 +1,21 @@
 export default defineNuxtConfig({
   compatibilityDate: '2024-04-03',
   devtools: { enabled: false },
+  modules: ['nuxt-security'],
+  security: {
+    nonce: true,
+    headers: {
+      crossOriginEmbedderPolicy: 'unsafe-none',
+      contentSecurityPolicy: {
+        'img-src': ["'self'", 'data:', 'https://images.unsplash.com'],
+        'script-src': ["'self'", "'unsafe-inline'"]
+      }
+    },
+    rateLimiter: {
+      tokensPerInterval: 100,
+      interval: 60000
+    }
+  },
   css: ['~/assets/main.css'],
   app: {
     head: {

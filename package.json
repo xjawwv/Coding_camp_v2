@@ -9,9 +9,12 @@
     "preview": "nuxt preview"
   },
   "devDependencies": {
+    "@types/pg": "^8.23.1",
     "nuxt": "^3.17.5"
   },
   "dependencies": {
-    "motion-v": "^2.4.2"
+    "motion-v": "^2.4.2",
+    "nuxt-security": "^2.6.0",
+    "pg": "^8.23.0"
   }
 }
