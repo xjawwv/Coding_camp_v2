@@ -266,3 +266,34 @@ curl -b cookies.txt -X POST http://localhost:3000/api/admin/courses \
 ```
 
 Gambar disimpan sebagai data URL pada kolom `courses.image`. Pendekatan ini sesuai untuk aplikasi kecil. Jika ukuran katalog atau file membesar, pindahkan gambar ke object storage seperti S3 atau Cloudinary dan simpan URL-nya di database.
+
+## Materi Course TXT
+
+Pada form Course, upload file `course.txt` pada field `contentFile`. File picker memakai filter `.txt`, tetapi filter browser bukan pengaman. Server tetap menolak file yang extension-nya bukan `.txt`, ukurannya lebih dari 1 MB, atau bukan UTF-8 valid.
+
+Contoh isi materi:
+
+```md
+# Dasar Pemrograman JavaScript
+
+Fondasi JavaScript untuk pemula.
+
+## 01. Variable
+
+Variable adalah tempat menyimpan nilai. Gunakan `const` sebagai default.
+
+```javascript
+const namaPengguna = "Ilan";
+console.log(namaPengguna);
+```
+
+:::callout{variant="info"}
+Gunakan const untuk nilai yang tidak ditimpa ulang.
+:::
+
+- String
+- Number
+- Boolean
+```
+
+Syntax yang didukung: `#` sampai `###` untuk heading, fenced code block, inline code dengan backtick, callout `info/warning/success/danger`, bullet list, quote dengan `>`, dan divider `---`.

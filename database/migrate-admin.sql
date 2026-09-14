@@ -33,3 +33,8 @@ CREATE TABLE IF NOT EXISTS courses (
 );
 
 ALTER TABLE courses MODIFY COLUMN image MEDIUMTEXT NOT NULL;
+SET @content_column_exists = (SELECT COUNT(*) FROM information_schema.columns WHERE table_schema = DATABASE() AND table_name = 'courses' AND column_name = 'content');
+SET @content_sql = IF(@content_column_exists = 0, 'ALTER TABLE courses ADD COLUMN content MEDIUMTEXT NULL', 'SELECT 1');
+PREPARE content_statement FROM @content_sql;
+EXECUTE content_statement;
+DEALLOCATE PREPARE content_statement;
