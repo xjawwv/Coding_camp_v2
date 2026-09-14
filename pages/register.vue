@@ -7,6 +7,7 @@ const errorMessage = ref('')
 const loading = ref(false)
 const user = useState<{ name: string; email: string } | null>('user', () => null)
 const route = useRoute()
+definePageMeta({ pageTransition: { name: 'auth-transition', mode: 'out-in' } })
 
 async function register() {
   errorMessage.value = ''
