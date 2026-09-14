@@ -14,7 +14,13 @@ const links = computed<NavigationMenuItem[][]>(() => [[{
 }] : []), {
   label: 'Website', icon: 'i-lucide-external-link', to: '/'
 }], [{
-  label: 'Documentation', icon: 'i-lucide-book-open', to: '/AUTH.md'
+  label: 'Auth Docs', icon: 'i-lucide-lock-keyhole', to: '/docs/auth'
+}, {
+  label: 'Admin Docs', icon: 'i-lucide-shield', to: '/docs/admin'
+}, {
+  label: 'Uploads', icon: 'i-lucide-upload', to: '/docs/uploads'
+}, {
+  label: 'Course Content', icon: 'i-lucide-file-text', to: '/docs/course-content'
 }, {
   label: 'Support', icon: 'i-lucide-life-buoy', to: 'mailto:ilanalimanjs@gmail.com'
 }]])
