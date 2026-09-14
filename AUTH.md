@@ -1,14 +1,21 @@
 # Authentication API
 
-Autentikasi menggunakan MySQL, session token acak, dan cookie `cc_session` HTTP-only. Request body menggunakan JSON. Query database menggunakan parameter terpisah (`?`), bukan string interpolation.
+Autentikasi menggunakan MySQL 9.6.0, session token acak, dan cookie `cc_session` HTTP-only. Request body menggunakan JSON. Query database menggunakan parameter terpisah (`?`), bukan string interpolation.
 
 ## Setup
 
-1. Pastikan MySQL berjalan.
+1. Pastikan MySQL 9.6.0 berjalan.
 2. Buat database dan tabel:
 
 ```bash
 mysql -u root -p < database/schema.sql
+```
+
+Verifikasi versi server:
+
+```bash
+mysql --version
+mysql -u root -p -e "SELECT VERSION();"
 ```
 
 3. Salin `.env.example` menjadi `.env`.
@@ -24,7 +31,7 @@ DATABASE_URL=mysql://root:password@localhost:3306/coding_camp
 npm run dev
 ```
 
-Untuk database yang sudah ada dari versi sebelumnya, jalankan migration admin. Migration ini kompatibel dengan MySQL/MariaDB yang tidak mendukung `ADD COLUMN IF NOT EXISTS`:
+Untuk database yang sudah ada dari versi sebelumnya, jalankan migration admin. Migration ini kompatibel dengan MySQL 9.6.0 dan versi MySQL/MariaDB yang lebih lama:
 
 ```bash
 mysql -u root -p < database/migrate-admin.sql
