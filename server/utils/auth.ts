@@ -1,4 +1,4 @@
-import { createHash, randomBytes, scrypt as nodeScrypt, timingSafeEqual } from 'node:crypto'
+import { createHash, randomBytes, randomUUID, scrypt as nodeScrypt, timingSafeEqual } from 'node:crypto'
 import { promisify } from 'node:util'
 import type { H3Event } from 'h3'
 import { database } from './db'
@@ -27,7 +27,7 @@ export function sessionValue(event: H3Event) {
 export async function createSession(event: H3Event, userId: string) {
   const token = randomBytes(32).toString('hex')
   const tokenHash = createHash('sha256').update(token).digest('hex')
-  await database().query('INSERT INTO sessions (token_hash, user_id, expires_at) VALUES ($1, $2, NOW() + INTERVAL \'30 days\')', [tokenHash, userId])
+  await database().query('INSERT INTO sessions (id, token_hash, user_id, expires_at) VALUES (?, ?, ?, DATE_ADD(NOW(), INTERVAL 30 DAY))', [randomUUID(), tokenHash, userId])
   setCookie(event, sessionCookie, token, { httpOnly: true, sameSite: 'lax', secure: process.env.NODE_ENV === 'production', maxAge: 60 * 60 * 24 * 30, path: '/' })
 }
 
@@ -35,12 +35,12 @@ export async function currentUser(event: H3Event) {
   const token = sessionValue(event)
   if (!token) return null
   const tokenHash = createHash('sha256').update(token).digest('hex')
-  const result = await database().query('SELECT u.id, u.email, u.name FROM users u JOIN sessions s ON s.user_id = u.id WHERE s.token_hash = $1 AND s.expires_at > NOW()', [tokenHash])
-  return result.rows[0] || null
+  const [rows] = await database().query('SELECT u.id, u.email, u.name FROM users u JOIN sessions s ON s.user_id = u.id WHERE s.token_hash = ? AND s.expires_at > NOW()', [tokenHash])
+  return (rows as any[])[0] || null
 }
 
 export async function revokeSession(event: H3Event) {
   const token = sessionValue(event)
-  if (token) await database().query('DELETE FROM sessions WHERE token_hash = $1', [createHash('sha256').update(token).digest('hex')])
+  if (token) await database().query('DELETE FROM sessions WHERE token_hash = ?', [createHash('sha256').update(token).digest('hex')])
   deleteCookie(event, sessionCookie, { path: '/' })
 }
