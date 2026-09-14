@@ -6,6 +6,7 @@ const passwordConfirmation = ref('')
 const errorMessage = ref('')
 const loading = ref(false)
 const user = useState<{ name: string; email: string } | null>('user', () => null)
+const route = useRoute()
 
 async function register() {
   errorMessage.value = ''
@@ -17,7 +18,7 @@ async function register() {
   try {
     const result = await $fetch<{ user: typeof user.value }>('/api/auth/register', { method: 'POST', body: { name: name.value, email: email.value, password: password.value } })
     user.value = result.user
-    await navigateTo('/')
+    await navigateTo(typeof route.query.redirect === 'string' ? route.query.redirect : '/')
   } catch (error: any) {
     errorMessage.value = error.data?.message || 'Registrasi gagal'
   } finally {

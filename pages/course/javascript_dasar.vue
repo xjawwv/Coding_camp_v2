@@ -11,6 +11,10 @@ const sections = [
   ['Function', 'Function membungkus sekumpulan logika yang bisa dipanggil berulang kali tanpa menulis ulang kodenya.', 'function hitungTotal(harga, jumlah) {\n  return harga * jumlah;\n}\nconsole.log(hitungTotal(50000, 3));']
 ]
 useHead({ title: `${course.title} - Coding Camp RPL 2026` })
+const { loadUser } = useAuth()
+onMounted(async () => {
+  if (!await loadUser()) await navigateTo({ path: '/login', query: { redirect: route.fullPath } })
+})
 </script>
 <template>
   <SiteNav />

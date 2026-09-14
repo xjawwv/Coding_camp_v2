@@ -4,6 +4,7 @@ const password = ref('')
 const errorMessage = ref('')
 const loading = ref(false)
 const user = useState<{ name: string; email: string } | null>('user', () => null)
+const route = useRoute()
 
 async function login() {
   errorMessage.value = ''
@@ -11,7 +12,7 @@ async function login() {
   try {
     const result = await $fetch<{ user: typeof user.value }>('/api/auth/login', { method: 'POST', body: { email: email.value, password: password.value } })
     user.value = result.user
-    await navigateTo('/')
+    await navigateTo(typeof route.query.redirect === 'string' ? route.query.redirect : '/')
   } catch (error: any) {
     errorMessage.value = error.data?.message || 'Login gagal'
   } finally {
