@@ -13,7 +13,7 @@ async function login() {
     user.value = result.user
     await navigateTo('/')
   } catch (error: any) {
-    errorMessage.value = error.data?.statusMessage || 'Login gagal'
+    errorMessage.value = error.data?.message || 'Login gagal'
   } finally {
     loading.value = false
   }
@@ -21,5 +21,5 @@ async function login() {
 </script>
 <template>
   <SiteNav />
-  <main class="auth-page"><form class="auth-card" @submit.prevent="login"><p class="hero-label">Coding Camp Account</p><h1>Masuk ke akunmu</h1><p class="auth-description">Lanjutkan belajar dengan session yang aman.</p><label>Email<input v-model="email" type="email" autocomplete="email" required></label><label>Password<input v-model="password" type="password" autocomplete="current-password" minlength="8" required></label><p v-if="errorMessage" class="auth-error" role="alert">{{ errorMessage }}</p><button class="button-primary auth-submit" type="submit" :disabled="loading">{{ loading ? 'Memproses...' : 'Login' }}</button></form></main>
+  <main class="auth-page"><form class="auth-card" @submit.prevent="login"><p class="hero-label">Coding Camp Account</p><h1>Masuk ke akunmu</h1><p class="auth-description">Lanjutkan belajar dengan session yang aman.</p><label>Email<input v-model="email" type="email" autocomplete="email" required></label><label>Password<input v-model="password" type="password" autocomplete="current-password" minlength="8" required></label><p v-if="errorMessage" class="auth-error" role="alert">{{ errorMessage }}</p><button class="button-primary auth-submit" type="submit" :disabled="loading">{{ loading ? 'Memproses...' : 'Login' }}</button><p class="auth-switch">Belum punya akun? <NuxtLink to="/register">Daftar sekarang</NuxtLink></p></form></main>
 </template>
