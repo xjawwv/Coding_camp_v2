@@ -19,3 +19,4 @@ EXECUTE status_statement;
 DEALLOCATE PREPARE status_statement;
 
 UPDATE courses SET status = 'draft' WHERE status IS NULL OR status = '';
+ALTER TABLE courses MODIFY COLUMN image VARCHAR(1000) NOT NULL;
