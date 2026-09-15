@@ -5,3 +5,9 @@ SET @role_sql = IF(@role_column_exists = 0, 'ALTER TABLE users ADD COLUMN role E
 PREPARE role_statement FROM @role_sql;
 EXECUTE role_statement;
 DEALLOCATE PREPARE role_statement;
+
+SET @content_column_exists = (SELECT COUNT(*) FROM information_schema.columns WHERE table_schema = DATABASE() AND table_name = 'courses' AND column_name = 'content');
+SET @content_sql = IF(@content_column_exists = 0, 'ALTER TABLE courses ADD COLUMN content JSON NULL', 'SELECT 1');
+PREPARE content_statement FROM @content_sql;
+EXECUTE content_statement;
+DEALLOCATE PREPARE content_statement;
