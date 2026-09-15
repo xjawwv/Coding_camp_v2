@@ -10,6 +10,7 @@ const errorMessage = ref('')
 const imageFile = ref<File | null>(null)
 const courseImage = ref('')
 const status = ref<'draft' | 'published'>('draft')
+const quizground = computed(() => typeof route.query.quizground === 'string' ? route.query.quizground : '')
 const emptyContent = () => ({ type: 'doc', content: [{ type: 'paragraph' }] })
 const form = reactive({ title: '', description: '', learningObjectives: '', content: emptyContent(), level: 'beginner', category: '', duration: '', uploadedAt: '' })
 
@@ -44,6 +45,7 @@ async function changeStatus(action: 'publish' | 'unpublish') {
   await $fetch(`/api/admin/courses/${route.params.id_course}/${action}`, { method: 'POST' })
   status.value = action === 'publish' ? 'published' : 'draft'
 }
+function saveQuiz(quiz: { question: string; options: string[]; correctIndex: number; explanation: string }) { const content = form.content as any; content.content ||= []; content.content.push({ type: 'courseQuiz', attrs: quiz }); navigateTo({ path: route.path, query: {} }) }
 
 onMounted(loadCourse)
 </script>
@@ -57,6 +59,8 @@ onMounted(loadCourse)
       <UDashboardToolbar><template #left><UButton to="/admin/courses" label="Kembali ke Course" color="neutral" variant="ghost" /></template></UDashboardToolbar>
     </template>
     <template #body>
+      <QuizgroundEditor v-if="quizground" @save="saveQuiz" @cancel="navigateTo({ path: route.path, query: {} })" />
+      <template v-else>
       <div v-if="loading" class="p-8 text-muted">Memuat course...</div>
       <div v-else class="space-y-6">
         <p v-if="errorMessage" class="text-error">{{ errorMessage }}</p>
@@ -70,6 +74,7 @@ onMounted(loadCourse)
           </form>
         </UPageCard>
       </div>
+      </template>
     </template>
   </UDashboardPanel>
 </template>
