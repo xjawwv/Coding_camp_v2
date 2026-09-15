@@ -16,6 +16,7 @@
     "@iconify-json/lucide": "^1.2.132",
     "@iconify-json/simple-icons": "^1.2.96",
     "@nuxt/ui": "^4.11.1",
+    "@tiptap/extension-image": "^3.31.3",
     "@tiptap/extension-placeholder": "^3.31.3",
     "@tiptap/starter-kit": "^3.31.3",
     "@tiptap/vue-3": "^3.31.3",

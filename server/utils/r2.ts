@@ -9,9 +9,9 @@ function r2Client() {
   return client
 }
 
-export async function uploadCourseImage(data: Buffer, mimeType: string, filename: string) {
+export async function uploadCourseImage(data: Buffer, mimeType: string, filename: string, prefix = 'course-images') {
   const extension = filename.toLowerCase().split('.').pop() || 'bin'
-  const key = `course-images/${randomUUID()}.${extension}`
+  const key = `${prefix}/${randomUUID()}.${extension}`
   await r2Client().send(new PutObjectCommand({ Bucket: process.env.R2_BUCKET_NAME, Key: key, Body: data, ContentType: mimeType, CacheControl: 'public, max-age=31536000, immutable' }))
   return `${process.env.R2_PUBLIC_URL || 'https://cdn.yuroflac.my.id'}/${key}`
 }
