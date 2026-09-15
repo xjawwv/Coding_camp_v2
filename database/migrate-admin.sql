@@ -17,3 +17,5 @@ SET @status_sql = IF(@status_column_exists = 0, 'ALTER TABLE courses ADD COLUMN 
 PREPARE status_statement FROM @status_sql;
 EXECUTE status_statement;
 DEALLOCATE PREPARE status_statement;
+
+UPDATE courses SET status = 'draft' WHERE status IS NULL OR status = '';
