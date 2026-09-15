@@ -1,28 +1,40 @@
 # Admin System
 
-Panel admin saat ini hanya menangani user. Course dibuat dan dikelola langsung pada source page di `pages/course`.
+Panel admin menggunakan role `admin` dan memiliki dua area terpisah:
 
-## Roles
+- `/admin/users`: pengelolaan user.
+- `/admin/courses`: CRUD course.
 
-- `user`: dapat mengakses dashboard dan course.
-- `admin`: dapat mengakses dashboard dan panel User.
+## Course Status
 
-Promosi akun admin:
+Course baru dibuat dengan status `draft`. Course draft tidak muncul pada katalog publik.
 
-```sql
-USE coding_camp;
-UPDATE users SET role = 'admin' WHERE email = 'admin@example.com';
-```
+Admin dapat:
 
-## Routes
+- Publish course agar muncul pada katalog.
+- Unpublish course agar kembali menjadi draft dan tidak tampil pada katalog.
+- Edit course.
+- Hapus course.
 
-- `/admin`: overview admin untuk user.
-- `/admin/users`: daftar dan pengelolaan user.
+## Course API
 
-## API
+- `GET /api/admin/courses`
+- `POST /api/admin/courses`
+- `PUT /api/admin/courses/:id`
+- `DELETE /api/admin/courses/:id`
+- `POST /api/admin/courses/:id/publish`
+- `POST /api/admin/courses/:id/unpublish`
+
+Katalog publik hanya membaca course dengan status `published` melalui `GET /api/courses`.
+
+## User API
 
 - `GET /api/admin/users`
 - `PATCH /api/admin/users/:id`
 - `DELETE /api/admin/users/:id`
 
-Semua endpoint memvalidasi role admin di server menggunakan `requireAdmin()`.
+Admin aktif tidak dapat menurunkan role dirinya sendiri atau menghapus dirinya sendiri.
+
+## Authorization
+
+Semua endpoint admin memvalidasi session dan role di server menggunakan `requireAdmin()`. Menyembunyikan menu pada frontend bukan pengaman.

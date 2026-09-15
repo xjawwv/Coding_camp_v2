@@ -14,7 +14,8 @@ function resetForm() { editing.value = null; Object.assign(form, { title: '', de
 async function saveCourse() { errorMessage.value = ''; try { if (editing.value) await $fetch(`/api/admin/courses/${editing.value.id}`, { method: 'PUT', body: form }); else await $fetch('/api/admin/courses', { method: 'POST', body: form }); resetForm(); await loadCourses() } catch (error: any) { errorMessage.value = error.data?.statusMessage || error.data?.message || 'Course gagal disimpan' } }
 async function deleteCourse(id: string) { await $fetch(`/api/admin/courses/${id}`, { method: 'DELETE' }); await loadCourses() }
 async function publishCourse(id: string) { await $fetch(`/api/admin/courses/${id}/publish`, { method: 'POST' }); await loadCourses() }
-function actions(item: Course) { return [[{ label: 'Edit', icon: 'i-lucide-pencil', onSelect: () => editCourse(item) }, { label: 'Hapus', icon: 'i-lucide-trash-2', color: 'error', onSelect: () => deleteCourse(item.id) }]] }
+async function unpublishCourse(id: string) { await $fetch(`/api/admin/courses/${id}/unpublish`, { method: 'POST' }); await loadCourses() }
+function actions(item: Course) { return [[{ label: item.status === 'published' ? 'Unpublish' : 'Publish', icon: item.status === 'published' ? 'i-lucide-eye-off' : 'i-lucide-rocket', onSelect: () => item.status === 'published' ? unpublishCourse(item.id) : publishCourse(item.id) }, { label: 'Edit', icon: 'i-lucide-pencil', onSelect: () => editCourse(item) }, { label: 'Hapus', icon: 'i-lucide-trash-2', color: 'error', onSelect: () => deleteCourse(item.id) }]] }
 onMounted(loadCourses)
 </script>
 <template>

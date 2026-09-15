@@ -6,11 +6,13 @@ import { motion } from 'motion-v'
 const search = ref('')
 const level = ref('all')
 const selected = ref<(typeof courses)[number] | null>(null)
-const filteredCourses = computed(() => courses.filter(course => (level.value === 'all' || course.level === level.value) && course.title.toLowerCase().includes(search.value.toLowerCase())))
+const publicCourses = ref<any[]>(courses)
+const filteredCourses = computed(() => publicCourses.value.filter(course => (level.value === 'all' || course.level === level.value) && course.title.toLowerCase().includes(search.value.toLowerCase())))
 const truncate = (value: string) => value.length > 100 ? `${value.slice(0, 100).trim()}...` : value
 const date = (value: string) => new Intl.DateTimeFormat('id-ID', { day: 'numeric', month: 'short', year: 'numeric' }).format(new Date(value))
 const { requireLogin } = useAuth()
-const startCourse = (id: number) => requireLogin(`/course/javascript_dasar?id=${id}`)
+const startCourse = (id: number | string) => requireLogin(`/course/javascript_dasar?id=${id}`)
+onMounted(async () => { try { const result = await $fetch<{ courses: any[] }>('/api/courses'); if (result.courses.length) publicCourses.value = result.courses } catch { publicCourses.value = courses } })
 </script>
 <template>
   <SiteNav />
