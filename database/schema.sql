@@ -28,6 +28,7 @@ CREATE TABLE IF NOT EXISTS courses (
   description TEXT NOT NULL,
   learning_objectives TEXT NOT NULL,
   content JSON NULL,
+  status ENUM('draft', 'published') NOT NULL DEFAULT 'draft',
   image MEDIUMTEXT NOT NULL,
   level ENUM('beginner', 'intermediate', 'advanced') NOT NULL DEFAULT 'beginner',
   category VARCHAR(100) NOT NULL,

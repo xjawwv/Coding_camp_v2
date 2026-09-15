@@ -11,3 +11,9 @@ SET @content_sql = IF(@content_column_exists = 0, 'ALTER TABLE courses ADD COLUM
 PREPARE content_statement FROM @content_sql;
 EXECUTE content_statement;
 DEALLOCATE PREPARE content_statement;
+
+SET @status_column_exists = (SELECT COUNT(*) FROM information_schema.columns WHERE table_schema = DATABASE() AND table_name = 'courses' AND column_name = 'status');
+SET @status_sql = IF(@status_column_exists = 0, 'ALTER TABLE courses ADD COLUMN status ENUM(''draft'', ''published'') NOT NULL DEFAULT ''draft''', 'SELECT 1');
+PREPARE status_statement FROM @status_sql;
+EXECUTE status_statement;
+DEALLOCATE PREPARE status_statement;

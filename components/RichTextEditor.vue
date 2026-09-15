@@ -6,6 +6,7 @@ import Placeholder from '@tiptap/extension-placeholder'
 const props = defineProps<{ modelValue: Record<string, unknown> | null }>()
 const emit = defineEmits<{ 'update:modelValue': [value: Record<string, unknown>] }>()
 const editor = useEditor({ extensions: [StarterKit, Placeholder.configure({ placeholder: 'Tulis materi course di sini...' })], content: props.modelValue || { type: 'doc', content: [{ type: 'paragraph' }] }, onUpdate: ({ editor: instance }) => emit('update:modelValue', instance.getJSON() as Record<string, unknown>) })
+watch([editor, () => props.modelValue], ([instance, value]) => { if (instance && value && JSON.stringify(instance.getJSON()) !== JSON.stringify(value)) instance.commands.setContent(value, false) }, { deep: true, immediate: true })
 onBeforeUnmount(() => editor.value?.destroy())
 </script>
 <template>
