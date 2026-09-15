@@ -12,7 +12,7 @@ async function saveCourse() { errorMessage.value = ''; try { const body = new Fo
 async function deleteCourse(id: string) { await $fetch(`/api/admin/courses/${id}`, { method: 'DELETE' }); await loadCourses() }
 async function publishCourse(id: string) { await $fetch(`/api/admin/courses/${id}/publish`, { method: 'POST' }); await loadCourses() }
 async function unpublishCourse(id: string) { await $fetch(`/api/admin/courses/${id}/unpublish`, { method: 'POST' }); await loadCourses() }
-function actions(item: Course) { return [[{ label: item.status === 'published' ? 'Unpublish' : 'Publish', icon: item.status === 'published' ? 'i-lucide-eye-off' : 'i-lucide-rocket', onSelect: () => item.status === 'published' ? unpublishCourse(item.id) : publishCourse(item.id) }, { label: 'Edit', icon: 'i-lucide-pencil', onSelect: () => editCourse(item) }, { label: 'Hapus', icon: 'i-lucide-trash-2', color: 'error', onSelect: () => deleteCourse(item.id) }]] }
+function actions(item: Course) { return [[{ label: item.status === 'published' ? 'Unpublish' : 'Publish', icon: item.status === 'published' ? 'i-lucide-eye-off' : 'i-lucide-rocket', onSelect: () => item.status === 'published' ? unpublishCourse(item.id) : publishCourse(item.id) }, { label: 'Edit', icon: 'i-lucide-pencil', to: `/admin/course/${item.id}` }, { label: 'Hapus', icon: 'i-lucide-trash-2', color: 'error', onSelect: () => deleteCourse(item.id) }]] }
 onMounted(loadCourses)
 </script>
 <template>

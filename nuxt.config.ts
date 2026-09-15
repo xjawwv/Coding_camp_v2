@@ -7,7 +7,7 @@ export default defineNuxtConfig({
     headers: {
       crossOriginEmbedderPolicy: 'unsafe-none',
       contentSecurityPolicy: {
-        'img-src': ["'self'", 'data:', 'https://images.unsplash.com'],
+        'img-src': ["'self'", 'data:', 'https://images.unsplash.com', 'https://cdn.yuroflac.my.id'],
         'script-src': ["'self'", "'unsafe-inline'", "'unsafe-eval'"]
       }
     },
