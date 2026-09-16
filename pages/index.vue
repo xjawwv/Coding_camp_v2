@@ -3,6 +3,7 @@ import { courses, levelNames } from '~/data/courses'
 import heroIllustration from '~/assets/illustration-hero.svg'
 import aboutIllustration from '~/assets/illustration-about.svg'
 import { motion } from 'motion-v'
+import { courseSlug } from '~/utils/course-route'
 const search = ref('')
 const level = ref('all')
 const selected = ref<(typeof courses)[number] | null>(null)
@@ -11,7 +12,7 @@ const filteredCourses = computed(() => publicCourses.value.filter(course => (lev
 const truncate = (value: string) => value.length > 100 ? `${value.slice(0, 100).trim()}...` : value
 const date = (value: string) => new Intl.DateTimeFormat('id-ID', { day: 'numeric', month: 'short', year: 'numeric' }).format(new Date(value))
 const { requireLogin } = useAuth()
-const startCourse = (id: number | string) => requireLogin(`/course/javascript_dasar?id=${id}`)
+const startCourse = (courseOrId: any) => { const course = typeof courseOrId === 'object' ? courseOrId : publicCourses.value.find(item => item.id === courseOrId); if (course) return requireLogin(`/course/${courseSlug(course.title)}?id=${course.id}`) }
 onMounted(async () => { try { const result = await $fetch<{ courses: any[] }>('/api/courses'); if (result.courses.length) publicCourses.value = result.courses } catch { publicCourses.value = courses } })
 </script>
 <template>
