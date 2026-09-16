@@ -1,9 +1,9 @@
 <script setup lang="ts">
-definePageMeta({ layout: 'dashboard' })
-const { user, loadUser } = useAuth()
-const loading = ref(true)
-onMounted(async () => { if (!await loadUser()) await navigateTo({ path: '/login', query: { redirect: '/dashboard' } }); loading.value = false })
+definePageMeta({ layout: false })
+const route = useRoute()
+if (route.path === '/dashboard') await navigateTo('/dashboard/overview', { redirectCode: 302 })
 </script>
+
 <template>
-  <UDashboardPanel id="dashboard"><template #header><UDashboardNavbar title="Dashboard"><template #leading><UDashboardSidebarCollapse /></template><template #right><UButton to="/#course" label="Lihat Course" color="primary" /></template></UDashboardNavbar><UDashboardToolbar><template #left><span class="text-sm text-muted">Overview akun dan perjalanan belajar</span></template></UDashboardToolbar></template><template #body><div v-if="loading" class="p-8 text-muted">Memuat dashboard...</div><div v-else-if="user" class="space-y-6"><div><p class="text-sm text-primary font-medium">Selamat datang kembali</p><h1 class="text-3xl font-semibold text-highlighted">{{ user.name }}</h1><p class="text-muted">Lanjutkan belajar dan capai target coding-mu.</p></div><UPageGrid class="lg:grid-cols-3"><UPageCard title="Course tersedia" description="Materi siap dipelajari" icon="i-lucide-book-open" variant="subtle"><strong class="text-3xl text-highlighted">1</strong></UPageCard><UPageCard title="Status akun" description="Session aman dan aktif" icon="i-lucide-shield-check" variant="subtle"><strong class="text-3xl text-highlighted">Aktif</strong></UPageCard><UPageCard title="Role" description="Akses sesuai role akun" icon="i-lucide-badge-check" variant="subtle"><strong class="text-3xl text-highlighted">{{ user.role === 'admin' ? 'Admin' : 'User' }}</strong></UPageCard></UPageGrid><UPageCard title="Mulai belajar" description="Pilih course untuk melanjutkan perjalananmu." icon="i-lucide-graduation-cap"><div class="mt-5 flex items-center justify-between gap-4 rounded-lg border border-default p-4"><div><UBadge color="primary" variant="subtle">Frontend</UBadge><h2 class="mt-2 font-semibold text-highlighted">Dasar Pemrograman JavaScript</h2><p class="text-sm text-muted">Pelajari fondasi JavaScript dari variabel sampai function.</p></div><UButton to="/#course" label="Buka course" color="primary" /></div></UPageCard></div></template></UDashboardPanel>
+  <NuxtPage />
 </template>

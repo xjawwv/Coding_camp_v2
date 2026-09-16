@@ -11,10 +11,11 @@ export default defineNuxtConfig({
         'script-src': ["'self'", "'unsafe-inline'", "'unsafe-eval'"]
       }
     },
-    rateLimiter: {
-      tokensPerInterval: 100,
+    // Nuxt dev/HMR sends many internal requests that should not consume the production quota.
+    rateLimiter: process.env.NODE_ENV === 'production' ? {
+      tokensPerInterval: 300,
       interval: 60000
-    }
+    } : false
   },
   css: ['~/assets/main.css', '~/assets/dashboard.css'],
   app: {

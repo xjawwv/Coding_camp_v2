@@ -1,0 +1,52 @@
+{
+  "name": "CodingCamp",
+  "colors": {
+    "light": {
+      "background": "#FAFAFA",
+      "surface": "#FFFFFF",
+      "text": "#0D0D0D",
+      "textSoft": "#1A1A1A",
+      "textMuted": "#7A7A7A",
+      "accent": "#FF5A1F",
+      "accentSoft": "#FFE7DB",
+      "border": "#EBEBEB"
+    },
+    "dark": {
+      "background": "#0D0D0D",
+      "surface": "#1A1A1A",
+      "text": "#FAFAFA",
+      "textSoft": "#EBEBEB",
+      "textMuted": "#9A9A9A",
+      "accent": "#FF6B35",
+      "accentSoft": "#3A2318",
+      "border": "#2A2A2A"
+    },
+    "status": {
+      "success": "#1F8A4C",
+      "warning": "#C98A00",
+      "danger": "#C93A3A"
+    },
+    "nuxtUi": {
+      "primary": "orange",
+      "neutral": "zinc"
+    },
+    "orangeScale": {
+      "50": "#FFF7ED",
+      "100": "#FFEDD5",
+      "200": "#FED7AA",
+      "300": "#FDBA74",
+      "400": "#FB923C",
+      "500": "#FF5A1F",
+      "600": "#EA4B16",
+      "700": "#C73D10",
+      "800": "#9F3413",
+      "900": "#7F2D12",
+      "950": "#431407"
+    }
+  },
+  "typography": {
+    "display": "Poppins, sans-serif",
+    "mono": "JetBrains Mono, monospace",
+    "logo": "Cherry Bomb One, cursive"
+  }
+}
