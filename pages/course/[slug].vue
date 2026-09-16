@@ -28,23 +28,39 @@ const pages = computed(() => {
 })
 const progress = computed(() => pages.value.length ? Math.min(100, Math.round(((new Set(completedPages.value).size + (completedPages.value.includes(currentPage.value) ? 0 : scrollDepth.value / 100)) / pages.value.length) * 100)) : 0)
 const nodeText = (node: any) => (node.content || []).map((item: any) => item.text || '').join('')
+const isUnlocked = (index: number) => index === 0 || completedPages.value.includes(index)
+const isPartial = (index: number) => index + 1 === currentPage.value && !completedPages.value.includes(index + 1) && scrollDepth.value > 0
 
 useHead(() => ({ title: `${course.value.title} - Coding Camp RPL 2026` }))
 onMounted(async () => {
   if (!await loadUser()) return navigateTo({ path: '/login', query: { redirect: route.fullPath } })
-  try { databaseCourse.value = (await $fetch<{ course: any }>(`/api/courses/${route.query.id}`)).course; course.value = databaseCourse.value } catch { await navigateTo('/') }
-  const saved = localStorage.getItem(`cc-course-progress-${route.query.id || course.value.id}`)
-  if (saved) { try { completedPages.value = JSON.parse(saved) } catch {} }
+  try {
+    databaseCourse.value = (await $fetch<{ course: any }>(`/api/courses/${route.query.id}`)).course
+    course.value = databaseCourse.value
+  } catch { await navigateTo('/') }
+  const progressKey = `cc-course-progress-${route.query.id || course.value.id}`
+  try {
+    const saved = await $fetch<{ progress: { completedPages: number[] } }>(`/api/courses/${route.query.id || course.value.id}/progress`)
+    completedPages.value = saved.progress.completedPages || []
+    localStorage.setItem(progressKey, JSON.stringify(completedPages.value))
+  } catch {
+    const saved = localStorage.getItem(progressKey)
+    if (saved) { try { completedPages.value = JSON.parse(saved) } catch {} }
+  }
   window.addEventListener('scroll', updateScrollDepth, { passive: true })
 })
 onBeforeUnmount(() => window.removeEventListener('scroll', updateScrollDepth))
 watch(currentPage, async () => { scrollDepth.value = 0; await nextTick(); window.scrollTo({ top: 0, behavior: 'smooth' }) })
 
-function saveProgress() { localStorage.setItem(`cc-course-progress-${route.query.id || course.value.id}`, JSON.stringify(completedPages.value)) }
+async function saveProgress() {
+  const courseId = String(route.query.id || course.value.id)
+  localStorage.setItem(`cc-course-progress-${courseId}`, JSON.stringify(completedPages.value))
+  try { await $fetch(`/api/courses/${courseId}/progress`, { method: 'PUT', body: { completedPages: completedPages.value, progress: progress.value } }) } catch {}
+}
 function updateScrollDepth() { const article = document.querySelector('.course-reader-content'); if (!article) return; const articleTop = article.getBoundingClientRect().top + window.scrollY; const maxScroll = article.scrollHeight - window.innerHeight; scrollDepth.value = maxScroll <= 0 ? 100 : Math.min(100, Math.max(0, Math.round(((window.scrollY - articleTop) / maxScroll) * 100))); if (scrollDepth.value >= 90 && !completedPages.value.includes(currentPage.value)) { completedPages.value = [...completedPages.value, currentPage.value]; saveProgress() } }
 function goToPage(page: number) { return navigateTo({ query: { ...route.query, page: String(page) } }) }
 function requestFinish() { updateScrollDepth(); showFinishDialog.value = true }
-function finishCourse() { showFinishDialog.value = false; completedPages.value = Array.from({ length: pages.value.length }, (_, index) => index + 1); saveProgress(); navigateTo('/dashboard/course') }
+async function finishCourse() { showFinishDialog.value = false; completedPages.value = Array.from({ length: pages.value.length }, (_, index) => index + 1); await saveProgress(); navigateTo('/dashboard/course') }
 </script>
 
 <template>
