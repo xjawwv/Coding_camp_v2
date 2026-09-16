@@ -14,14 +14,16 @@ const fallbackSections = [['Variable', 'Variable adalah tempat menyimpan nilai s
 const pages = computed(() => {
   const nodes = databaseCourse.value?.content?.content
   if (!nodes?.length) return fallbackSections.map(([title, description, code]) => ({ title, nodes: [{ type: 'paragraph', content: [{ text: description }] }, { type: 'courseCodeBlock', attrs: { language: 'javascript' }, content: [{ text: code }] }] }))
-  const result: any[] = []
-  for (const node of nodes) {
-    if (node.type === 'heading' || !result.length) result.push({ title: node.type === 'heading' ? nodeText(node) : 'Materi Course', nodes: node.type === 'heading' ? [] : [node] })
-    else result[result.length - 1].nodes.push(node)
-  }
-  return result.filter(page => page.nodes.length)
+  const result = nodes.reduce((result: any[], node: any) => {
+    if (node.type === 'horizontalRule') { if (result.at(-1)?.nodes.length) result.push({ title: `Materi ${result.length + 1}`, nodes: [] }); return result }
+    const page = result.at(-1) || (result.push({ title: 'Materi Course', nodes: [] }), result.at(-1))
+    if (node.type === 'heading' && page.title === 'Materi Course') page.title = nodeText(node)
+    else page.nodes.push(node)
+    return result
+  }, []).filter(page => page.nodes.length)
+  return result.map((page, index) => ({ ...page, title: page.nodes.find((node: any) => node.type === 'heading') ? nodeText(page.nodes.find((node: any) => node.type === 'heading')) : index ? `Materi ${index + 1}` : page.title }))
 })
-const progress = computed(() => pages.value.length ? Math.round((completedPages.value.length / pages.value.length) * 100) : 0)
+const progress = computed(() => pages.value.length ? Math.round((new Set(completedPages.value).size / pages.value.length) * 100) : 0)
 const pageComplete = computed(() => completedPages.value.includes(currentPage.value))
 const nodeText = (node: any) => (node.content || []).map((item: any) => item.text || '').join('')
 
@@ -31,11 +33,13 @@ onMounted(async () => {
   try { databaseCourse.value = (await $fetch<{ course: any }>(`/api/courses/${route.query.id}`)).course; course.value = databaseCourse.value } catch { await navigateTo('/') }
   const saved = localStorage.getItem(`cc-course-progress-${route.query.id || course.value.id}`)
   if (saved) { try { completedPages.value = JSON.parse(saved) } catch {} }
+  markVisited(currentPage.value)
 })
 
 function saveProgress() { localStorage.setItem(`cc-course-progress-${route.query.id || course.value.id}`, JSON.stringify(completedPages.value)) }
+function markVisited(page: number) { const visited = Array.from({ length: Math.max(0, page) }, (_, index) => index + 1); completedPages.value = [...new Set([...completedPages.value, ...visited])]; saveProgress() }
 function togglePageComplete() { completedPages.value = pageComplete.value ? completedPages.value.filter(page => page !== currentPage.value) : [...completedPages.value, currentPage.value]; saveProgress() }
-function goToPage(page: number) { return navigateTo({ query: { ...route.query, page: String(page) } }) }
+function goToPage(page: number) { if (page > currentPage.value) markVisited(currentPage.value); return navigateTo({ query: { ...route.query, page: String(page) } }) }
 </script>
 
 <template>
